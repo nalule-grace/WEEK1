@@ -1,31 +1,39 @@
 #include <stdio.h>
-//update generic.c to parse the result as a parameter.To be able tell the user an error occured if a null pointer is called.
 
-#include <stdio.h>
-//function
+int arrayAdd(double *array, int array_length, int num_values, double *result);
 
-double arrayAdd(double *array, int value, double sum){
- double sum = 0.0;
+int main() {
+    double array[] = {1.0, 2.0, 3.0, 4.0, 5.0};
+    int array_length = sizeof(array) / sizeof(array[0]);
+    int num_values = 4;
+    double sum;
 
- if(array == NULL ){
-    printf("NULL POINTER");
- }
+    int status = arrayAdd(array, array_length, num_values, &sum);
 
+    if (status == 0) {
+        printf("Sum of %d values: %.2f\n", num_values, sum);
+    } else if (status == 1) {
+        printf("Error: NULL pointer\n");
+    } else if (status == 2) {
+        printf("Error: num_values exceeds array length\n");
+    }
 
- for( int i=0; i<value; i++){
-    sum = sum + array[i];
- }
- return sum;
+    return 0;
 }
 
-int main(){
+int arrayAdd(double *array, int array_length, int num_values, double *result) {
+    if (array == NULL || result == NULL) {
+        return 1; // Error: NULL pointer
+    }
 
-double array[] ={1.0, 2.0, 3.0, 4.0, 5.0};
-int numOfvalues = 4;
+    if (num_values > array_length) {
+        return 2; // Error: num_values exceeds array length
+    }
 
-double result= (arrayAdd(array, numOfvalues));
+    *result = 0.0;
+    for (int i = 0; i < num_values; i++) {
+        *result += array[i];
+    }
 
-printf("sum of %d values : %.2f\n", numOfvalues, result);
-return 0;
-
+    return 0; // Success
 }
